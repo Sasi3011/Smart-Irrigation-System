@@ -5,6 +5,12 @@ import axios from 'axios';
 // Import API utility
 import { getApiUrl, API } from './utils/api';
 
+// Import debug utility
+import DEBUG from './debug';
+
+// Log configuration on startup
+DEBUG.logConfig();
+
 // Components
 import InputForm from './components/InputForm';
 import DecisionDisplay from './components/DecisionDisplay';
