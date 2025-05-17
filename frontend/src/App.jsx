@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// Import API utility
+import { getApiUrl, API } from './utils/api';
+
 // Components
 import InputForm from './components/InputForm';
 import DecisionDisplay from './components/DecisionDisplay';
@@ -26,7 +29,7 @@ const App = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get('/api-auth/user/');
+        const response = await axios.get(getApiUrl('api-auth/user/'));
         if (response.data.username) {
           setIsAuthenticated(true);
           setUser(response.data);
@@ -45,7 +48,7 @@ const App = () => {
   useEffect(() => {
     const fetchCropsAndSoils = async () => {
       try {
-        const response = await axios.get('/api/crops/');
+        const response = await axios.get(getApiUrl('api/crops/'));
         setCrops(response.data.crops);
         setSoils(response.data.soils);
       } catch (error) {
@@ -65,7 +68,7 @@ const App = () => {
 
   const fetchIrrigationHistory = async () => {
     try {
-      const response = await axios.get('/api/irrigation/history/');
+      const response = await axios.get(getApiUrl('api/irrigation/history/'));
       setIrrigationHistory(response.data.history);
     } catch (error) {
       console.error('Error fetching irrigation history:', error);
@@ -74,7 +77,7 @@ const App = () => {
 
   const handleLogin = async (username, password) => {
     try {
-      const response = await axios.post('/api-auth/login/', {
+      const response = await axios.post(getApiUrl('api-auth/login/'), {
         username,
         password,
       });
@@ -92,7 +95,7 @@ const App = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('/api-auth/logout/');
+      await axios.post(getApiUrl('api-auth/logout/'));
       setIsAuthenticated(false);
       setUser(null);
       navigate('/login');
@@ -103,7 +106,7 @@ const App = () => {
 
   const handleIrrigationSubmit = async (formData) => {
     try {
-      const response = await axios.post('/api/irrigation/decision/', formData);
+      const response = await axios.post(getApiUrl('api/irrigation/decision/'), formData);
       setIrrigationData(response.data);
       fetchIrrigationHistory(); // Refresh history after new decision
     } catch (error) {
@@ -114,7 +117,7 @@ const App = () => {
 
   const exportCSV = async () => {
     try {
-      window.open('/api/irrigation/export-csv/', '_blank');
+      window.open(getApiUrl('api/irrigation/export-csv/'), '_blank');
     } catch (error) {
       console.error('Error exporting CSV:', error);
     }
