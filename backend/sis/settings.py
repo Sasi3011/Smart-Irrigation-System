@@ -20,7 +20,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-for-devel
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Parse allowed hosts from environment variable or use default
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1','smart-irrigation-system-e9av.onrender.com').split(',')
 
 # Application definition
 INSTALLED_APPS = [
