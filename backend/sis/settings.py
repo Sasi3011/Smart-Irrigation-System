@@ -123,23 +123,31 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only allow all origins in debug mode
+# In production, we'll use specific origins
+# For development and initial deployment, allowing all origins can help troubleshoot
+CORS_ALLOW_ALL_ORIGINS = os.environ.get('CORS_ALLOW_ALL', 'False') == 'True'
 
 # Add your Vercel frontend URL to the allowed origins
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite default port
     "http://127.0.0.1:5173",
-    # Add your Vercel frontend URL when deployed
+    # Vercel deployment URLs
     "https://smart-irrigation-system.vercel.app",
+    "https://smart-irrigation-system-git-main.vercel.app",
+    "https://smart-irrigation-system-vercel.app",
 ]
 
 # REST Framework settings
+# For initial deployment and testing, we'll use more permissive settings
+# In production, you should enable proper authentication
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
     ],
+    # Use environment variable to control API permissions
+    # For deployment testing, set API_REQUIRE_AUTH=False
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated' if os.environ.get('API_REQUIRE_AUTH', 'True') == 'True' else 'rest_framework.permissions.AllowAny',
     ],
 }
 
